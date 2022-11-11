@@ -14,10 +14,8 @@ use App\Http\Controllers\TopPageController; //トップページのコントロ�
 |
 */
 
-// TopPage
-Route::get('/', function () {
-    return view('top-page');
-});
+// トップページ
+Route::get('/', [TopPageController::class, 'show'])->name('top-page.show');
 // Route::get('/', function () {
 //     return view('welcome');
 // });
