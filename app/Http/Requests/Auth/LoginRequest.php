@@ -45,7 +45,19 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if($this->routeIs('trainer.*')){
+        //$this(LoginRequest)のrouteIsメソッドでトレーナー関連のルート情報
+        //(トレーナーのログインフォーム)がtrainerユーザーから来た場合
+            $guard = 'trainers';
+            //Auth::guardメソッドの引数にtrainers(トレーナーのガード情報)を指定する。
+        }elseif($this->routeIs('doctor.*')){
+        //$this(LoginRequest)のrouteIsメソッドでドクター関連のルート情報
+        //(ドクターのログインフォーム)がdoctorユーザーから来た場合
+            $guard = 'doctors';
+            //Auth::guardメソッドの引数にdoctors(ドクターのガード情報)を指定する。
+        }
+
+        if (! Auth::guard($guard)->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

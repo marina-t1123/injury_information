@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Authentication Defaults
+    | Authentication Defaults(認証の初期設定)
     |--------------------------------------------------------------------------
     |
     | This option controls the default authentication "guard" and password
@@ -14,13 +14,15 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'trainers',
+        'passwords' => 'trainers',
+        // 'guard' => 'web',
+        // 'passwords' => 'users',
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Authentication Guards
+    | Authentication Guards(ガードの初期設定)
     |--------------------------------------------------------------------------
     |
     | Next, you may define every authentication guard for your application.
@@ -32,6 +34,7 @@ return [
     | mechanisms used by this application to persist your user's data.
     |
     | Supported: "session"
+    | GuardでSessionを使用している。
     |
     */
 
@@ -39,6 +42,18 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+
+        //トレーナーのガード設定
+        'trainers' => [
+            'driver' => 'session',
+            'provider' => 'trainers',
+        ],
+
+        //ドクターのガード設定
+        'doctors' => [
+            'driver' => 'session',
+            'provider' => 'doctors',
         ],
     ],
 
@@ -63,6 +78,18 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+        //トレーナーのプロバイダ設定
+        'trainers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Trainer::class,
+        ],
+
+        //ドクターのプロバイダ設定
+        'doctors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Doctor::class,
         ],
 
         // 'users' => [
@@ -90,6 +117,21 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        //トレーナーのパスワードリセット設定
+        'trainers' => [
+            'provider' => 'trainers',
+            'table' => 'trainer_password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'doctors' => [
+            'provider' => 'doctors',
+            'table' => 'doctor_password_resets',
             'expire' => 60,
             'throttle' => 60,
         ],
