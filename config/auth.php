@@ -1,5 +1,6 @@
 <?php
 
+//認証関連の設定ファイル
 return [
 
     /*
@@ -13,11 +14,10 @@ return [
     |
     */
 
+    //デフォルトのGuard設定をusers(トレーナー)に設定する
     'defaults' => [
-        'guard' => 'trainers',
-        'passwords' => 'trainers',
-        // 'guard' => 'web',
-        // 'passwords' => 'users',
+        'guard' => 'users',
+        'passwords' => 'users',
     ],
 
     /*
@@ -44,10 +44,10 @@ return [
             'provider' => 'users',
         ],
 
-        //トレーナーのガード設定
-        'trainers' => [
+        //user(トレーナー)のガード設定
+        'users' => [
             'driver' => 'session',
-            'provider' => 'trainers',
+            'provider' => 'users',
         ],
 
         //ドクターのガード設定
@@ -71,24 +71,23 @@ return [
     | be assigned to any extra authentication guards you have defined.
     |
     | Supported: "database", "eloquent"
+		| データベースやEloquent(モデル)からデータを取得している
     |
     */
 
     'providers' => [
+		//プロバイダ：ストレージ(DBなど)からユーザーを取得する方法を定義している。
         'users' => [
+				//users(ユーザー名がuser)の場合
             'driver' => 'eloquent',
+						//driverにeloquent(モデル)を指定して
             'model' => App\Models\User::class,
-        ],
-
-        //トレーナーのプロバイダ設定
-        'trainers' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Trainer::class,
+						//modelでUserを指定している。
         ],
 
         //ドクターのプロバイダ設定
         'doctors' => [
-            'driver' => 'eloquent',
+            'driver' => 'eloquent', //ドライバーとしてモデルを設定
             'model' => App\Models\Doctor::class,
         ],
 
@@ -97,6 +96,7 @@ return [
         //     'table' => 'users',
         // ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -121,14 +121,7 @@ return [
             'throttle' => 60,
         ],
 
-        //トレーナーのパスワードリセット設定
-        'trainers' => [
-            'provider' => 'trainers',
-            'table' => 'trainer_password_resets',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-
+        //ドクターのパスワードリセット設定
         'doctors' => [
             'provider' => 'doctors',
             'table' => 'doctor_password_resets',

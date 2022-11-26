@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\TopPageController; //トップページのコントローラ
 use App\Http\Controllers\Doctor\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Doctor\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Doctor\Auth\EmailVerificationNotificationController;
@@ -22,9 +21,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// トップページ
-// Route::get('/', [TopPageController::class, 'show'])->name('top-page.show');
-
 Route::get('/', function () {
     return view('doctor.welcome');
 });
@@ -32,6 +28,9 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('doctor.dashboard');
 })->middleware(['auth:doctors'])->name('dashboard');
+//->middleware(['auth])だとGuardが設定されていない。なので、(['auth:doctors])として
+//Guardの設定を追加するようにする。こうすることで、ログインしているかつ、doctorsの権限を持っていたら
+//ダッシュボードが表示できるということになる。
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])

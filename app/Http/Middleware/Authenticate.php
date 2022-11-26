@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Route;
 class Authenticate extends Middleware
 {
     //Authenticateクラスのプロパティとして、
-    //遷移先としてトレーナーとドクターのログイン画面のURLを作成する。
-    protected $trainer_route = 'trainer.login';
+    //遷移先としてuser(トレーナー)とドクターのログイン画面のURLを作成する。
+    protected $user_route = 'user.login';
     protected $doctor_route = 'doctor.login';
 
     /**
@@ -21,10 +21,10 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            if(Route::is('trainer.*')){
-                return route($this->trainer_route);
-            }elseif(Route::is('doctor.*')){
+            if(Route::is('doctor.*')){
                 return route($this->doctor_route);
+            } else {
+                return route($this->user_route);
             }
         }
     }

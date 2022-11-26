@@ -24,10 +24,10 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
             <!-- 各ユーザーごとに表示するナビゲーションの条件分岐 -->
-            @if(auth('trainers')->user())
-                @include('layouts.trainer-navigation.blade.php')
-            @elseif(auth('doctors')->user())
-                @include('layouts.doctor-navigation.blade.php')
+            @if(auth('doctors')->user())
+                @include('layouts.doctor-navigation')
+            @elseif(auth('users')->user())
+                @include('layouts.user-navigation')
             @endif
 
             <!-- Page Heading -->

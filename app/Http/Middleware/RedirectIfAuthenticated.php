@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class RedirectIfAuthenticated
 {
-    private const GUARD_TRAINER = 'trainers';
+    private const GUARD_USER = 'users';
     private const GUARD_DOCTOR = 'doctors';
-    //ここでの定数の値は、config>auth.phpのguardで設定した「trainers」「doctors」と
-    //設定した内容と合わせて文字列を設定する必要がある。
+    //ここでの定数の値は、config>auth.phpのguardで設定した「users」「doctors」と
+    //設定した内容(Guard名)と合わせて、定数の値の文字列を設定する必要がある。
 
     /**
      * Handle an incoming request.
@@ -34,12 +34,12 @@ class RedirectIfAuthenticated
         //     }
         // }
 
-        //trainerユーザー(ログイン済み)がアクセスした際のリダイレクト処理
-        if(Auth::guard(self::GUARD_TRAINER)->check() && $request->routeIs('trainer.*')){
-        //もし、trainerユーザーで認証しているかcheckメソッドでチェックをして認証していた場合
-        //かつ、リクエストが名前付きルート(/trainer.*)だった場合
-            return redirect(RouteServiceProvider::TRAINER_HOME);
-            //RouteServiceProvider.phpで設定したトレーナーユーザーのログイン後のリダイレクト先を指定
+        //user(トレーナーユーザー・ログイン済み)がアクセスした際のリダイレクト処理
+        if(Auth::guard(self::GUARD_USER)->check() && $request->routeIs('user.*')){
+        //もし、user(トレーナーユーザー)で認証しているかcheckメソッドでチェックをして認証していた場合
+        //かつ、リクエストが名前付きルート(/user.*)だった場合
+            return redirect(RouteServiceProvider::HOME);
+            //RouteServiceProvider.phpで設定したuser(トレーナーユーザー)のログイン後のリダイレクト先を指定
         }
 
         //doctorユーザー(ログイン済み)がアクセスした際のリダイレクト処理

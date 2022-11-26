@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Doctor extends Authenticatable
+//認証機能を持ったトレーナー(ユーザー)を作成したいので、Laravel Breezeで作成されたUserモデルから
+//Authenticatableクラスを継承してトレーナーを作成する。
 {
     use HasFactory;
 

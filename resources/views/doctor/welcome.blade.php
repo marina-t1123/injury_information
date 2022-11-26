@@ -25,7 +25,7 @@
             @if (Route::has('doctor.login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                     @auth('doctors')
-                        <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
+                        <a href="{{ url('/doctor/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
                     @else
                         <a href="{{ route('doctor.login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
 

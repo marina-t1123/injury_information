@@ -19,12 +19,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    //ユーザーのログイン後、「/dashboard」にリダイレクトをさせるために、リダイレクトのパスを定数として設定する。
-    // public const HOME = '/dashboard';
-    //トレーナーユーザーがログインした後のリダイレクト先を定数として設定する。
-    //定数の命名規則は、基本的に大文字でつける。
-    public const TRAINER_HOME = '/trainer/dashboard';
-    //ドクターユーザーがログインした後のリダイレクト先を定数として設定する。
+    public const HOME = '/dashboard';
     public const DOCTOR_HOME = '/doctor/dashboard';
 
     /**
@@ -49,46 +44,30 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-        //vender配下にあるRouteServiceProvider.phpのroutesメソッド
-
-            //Routeメソッドで元々２つのコードが書かれている。
-            //Route情報は大きく２種類のパターンがある。
-            //１つ目はmiddlewareのwebを使用するRoute、２つ目はmiddlewareのapiを使用するRoute。
 
             Route::prefix('api')
-            //api.phpの各routeでのURLの頭に「/api」がつく。
                 ->middleware('api')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
-            //api:フロント側をすべてJavaScriptなどで作成する場合に使用する。
-            //apiミドルウェアをapi.php(apiのルーティングファイル)の
-            //すべてのURL(各ルートで指定されているURL)に割り当てている。
 
-            //自動で作成されたユーザーのルート情報
-            Route::middleware('web')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/web.php'));
-            //webミドルウェア:LaravelでView側を表示して、リクエスト・レスポンスを返す場合に使用する
-            //routeファサードのmiddlewareメソッドを使って、'web'のミドルウェアを
-            //groupメソッド内で、base_path(ヘルパ関数)で指定しているroutesディレクトリのweb.php(ルーティングの設定ファイル)のすべての
-            //URLに割り当てている。
-
-            //トレーナーユーザーのルート情報を作成
-            Route::prefix('trainer')
-            //trainer.phpの各ルートでのURLの頭に「trainer」がつく
-                ->as('trainer.')
-                //asメソッドを使用してtrainer.phpの各ルートでのURLの頭に「trainer.」をつけるようにする
+            //User(トレーナー)のルート情報
+            Route::prefix('/')
+            //このように指定することで、「/doctor」のURL以外はトレーナーのURLということになる。
+                ->as('user.')
+                //asメソッドを使用してweb.phpの各ルートでのURLの頭に「user.」をつけるようにする
                 ->middleware('web')
                 ->namespace($this->namespace)
-                ->group(base_path('routes/trainer.php'));
-                //webミドルウェアをtrainer.php(トレーナーのルーティングファイル)の
-                //すべてのURL(各ルートで指定されているURL)に割り当てている。
+                ->group(base_path('routes/web.php'));
+                //webミドルウェア:LaravelでView側を表示して、リクエスト・レスポンスを返す場合に使用する
+                //routeファサードのmiddlewareメソッドを使って、'web'のミドルウェアを
+                //groupメソッド内で、base_path(ヘルパ関数)で指定しているroutesディレクトリのweb.php(ルーティングの設定ファイル)のすべての
+                //URLに割り当てている。
 
             //ドクターユーザーのルート情報を作成
             Route::prefix('doctor')
             //doctor.phpの各ルートでのURLの頭に「doctor」がつく
                 ->as('doctor.')
-                //asメソッドを使用してtrainer.phpの各ルートでのURLの頭に「doctor.」をつけるようにする
+                //asメソッドを使用してdoctor.phpの各ルートでのURLの頭に「doctor.」をつけるようにする
                 ->middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/doctor.php'));

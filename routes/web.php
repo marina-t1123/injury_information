@@ -14,14 +14,14 @@ use App\Http\Controllers\TopPageController; //トップページのコントロ�
 |
 */
 
-// トップページ
-Route::get('/', [TopPageController::class, 'show'])->name('top-page.show');
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('user.welcome');
+});
 
+//LaravelReezeをインストールすると追加されるルート設定
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+    return view('user.dashboard');
+})->middleware(['auth:users'])->name('dashboard');
 
+//LaravelBreezeのインストール時に追加されるUserのルート情報を設定しているファイルの読み込み
 require __DIR__.'/auth.php';
