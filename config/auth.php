@@ -1,10 +1,11 @@
 <?php
 
+//認証関連の設定ファイル
 return [
 
     /*
     |--------------------------------------------------------------------------
-    | Authentication Defaults
+    | Authentication Defaults(認証の初期設定)
     |--------------------------------------------------------------------------
     |
     | This option controls the default authentication "guard" and password
@@ -13,14 +14,15 @@ return [
     |
     */
 
+    //デフォルトのGuard設定をusers(トレーナー)に設定する
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'users',
         'passwords' => 'users',
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Authentication Guards
+    | Authentication Guards(ガードの初期設定)
     |--------------------------------------------------------------------------
     |
     | Next, you may define every authentication guard for your application.
@@ -32,6 +34,7 @@ return [
     | mechanisms used by this application to persist your user's data.
     |
     | Supported: "session"
+    | GuardでSessionを使用している。
     |
     */
 
@@ -39,6 +42,18 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+
+        //user(トレーナー)のガード設定
+        'users' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+        //ドクターのガード設定
+        'doctors' => [
+            'driver' => 'session',
+            'provider' => 'doctors',
         ],
     ],
 
@@ -56,13 +71,24 @@ return [
     | be assigned to any extra authentication guards you have defined.
     |
     | Supported: "database", "eloquent"
+		| データベースやEloquent(モデル)からデータを取得している
     |
     */
 
     'providers' => [
+		//プロバイダ：ストレージ(DBなど)からユーザーを取得する方法を定義している。
         'users' => [
+				//users(ユーザー名がuser)の場合
             'driver' => 'eloquent',
+						//driverにeloquent(モデル)を指定して
             'model' => App\Models\User::class,
+						//modelでUserを指定している。
+        ],
+
+        //ドクターのプロバイダ設定
+        'doctors' => [
+            'driver' => 'eloquent', //ドライバーとしてモデルを設定
+            'model' => App\Models\Doctor::class,
         ],
 
         // 'users' => [
@@ -70,6 +96,7 @@ return [
         //     'table' => 'users',
         // ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -90,6 +117,14 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        //ドクターのパスワードリセット設定
+        'doctors' => [
+            'provider' => 'doctors',
+            'table' => 'doctor_password_resets',
             'expire' => 60,
             'throttle' => 60,
         ],

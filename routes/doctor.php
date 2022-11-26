@@ -1,16 +1,37 @@
 <?php
 
-use App\Http\Controllers\User\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\User\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\User\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\User\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\User\Auth\NewPasswordController;
-use App\Http\Controllers\User\Auth\PasswordResetLinkController;
-use App\Http\Controllers\User\Auth\RegisteredUserController;
-use App\Http\Controllers\User\Auth\VerifyEmailController;
+use App\Http\Controllers\Doctor\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Doctor\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Doctor\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Doctor\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Doctor\Auth\NewPasswordController;
+use App\Http\Controllers\Doctor\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Doctor\Auth\RegisteredUserController;
+use App\Http\Controllers\Doctor\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-//LaravelBreezeのインストール時に作成されたUserのルーティング設定
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('doctor.welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('doctor.dashboard');
+})->middleware(['auth:doctors'])->name('dashboard');
+//->middleware(['auth])だとGuardが設定されていない。なので、(['auth:doctors])として
+//Guardの設定を追加するようにする。こうすることで、ログインしているかつ、doctorsの権限を持っていたら
+//ダッシュボードが表示できるということになる。
+
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
@@ -35,16 +56,16 @@ Route::middleware('guest')->group(function () {
                 ->name('password.update');
 });
 
-Route::middleware('auth:users')->group(function () { //auth:users追加
+Route::middleware('auth:doctors')->group(function () {
     Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
                 ->name('verification.notice');
 
     Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-                ->middleware(['auth:users', 'signed', 'throttle:6,1']) //auth:users追加
+                ->middleware(['auth:doctors', 'signed', 'throttle:6,1'])
                 ->name('verification.verify');
 
     Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-                ->middleware(['auth:users', 'throttle:6,1']) //auth:users追加
+                ->middleware(['auth:doctors', 'throttle:6,1'])
                 ->name('verification.send');
 
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])

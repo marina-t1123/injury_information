@@ -23,6 +23,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        //URLによってどのCookieを使用するか判定を行う
+        //trainerから始まるURL
+        if(request()->is('trainer')) {
+            config(['session.cookie' => config('session.cookie_trainer')]);
+        }
+
+        //doctorから始まるURL
+        if (request()->is('doctor')) {
+            config(['session.cookie' => config('session.cookie_doctor')]);
+        }
     }
 }

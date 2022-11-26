@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TopPageController; //トップページのコントローラ
 
 /*
 |--------------------------------------------------------------------------
@@ -14,11 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('user.welcome');
 });
 
+//LaravelReezeをインストールすると追加されるルート設定
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+    return view('user.dashboard');
+})->middleware(['auth:users'])->name('dashboard');
 
+//LaravelBreezeのインストール時に追加されるUserのルート情報を設定しているファイルの読み込み
 require __DIR__.'/auth.php';
